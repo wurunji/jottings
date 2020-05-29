@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>倒计时时钟</title>
+    <style type="text/css">
+        body{font: 15px/1.5 Arial;color: white;}
+        body,div,input,span{margin: 0;padding: 0;}
+        #outer{
+            width: 280px;
+            background-color: black;
+            margin: 10px auto;
+            text-align: center;
+            padding: 20px 10px;
+        }
+        #outer input{
+            width: 35px;
+            height: 20px;
+            padding: 2px 1px;
+            background-color: white;
+            color: black;
+            border: #d7b292 solid 2px;
+            text-align: center;
+            font: 18px/1.5 Arial;
+        }
+        #outer input:last-of-type{
+            display: block;
+            width: 100%;
+            height: 50px;
+            background: url("img/btn-1.png") no-repeat;
+            margin-top: 20px;
+            border: none;
+        }
+        #outer input.cancel{
+            background-position-y: -50px;
+        }
+        #outer span{margin: 0 5px;}
+    </style>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<!--    <script src="../../../library/jquery-3.4.1.min.js"></script>-->
+    <script type="text/javascript">
+        $(function () {
+            let _ipt = $("#outer>input");
+            let interval;
+            _ipt.each(function (i) {
+                i<2 && $(this).keypress(function () {
+                    //获取键盘输入
+                    // let keyCode = event.which;
+                    let keyCode = event.keyCode;
+                    //禁止非数字
+                    return !!(keyCode >= 48&& keyCode <= 57);
+                }).focus(function () {
+                    //禁止输入法
+                    $(this).css('imeMode','disabled');
+                }).bind("paste",function () {
+                    //获取剪切板内容
+                    let clipboard = event.clipboardData.getData('text');
+                    // let clipboard = event.clipboardData.getData('text/plain');
+                    // alert(clipboard);
+                    return !!(/^\d+$/.test(clipboard));
+                    //取消事件默认动作，既禁止粘贴
+                    // event.preventDefault();
+                }).keyup(function () {
+                    parseInt($(this).val())>60 && $(this).val('60');
+                }).blur(function () {
+                    parseInt($(this).val())>60 && $(this).val('60');
+                });
+            });
+            $("#outer>input:last-of-type").click(function () {
+                let _minutes = parseInt($(_ipt[0]).val());
+                let _seconds = parseInt($(_ipt[1]).val());
+                if(!$(this).hasClass("cancel")){
+                    $(this).addClass("cancel");
+                    interval = setInterval(function () {
+                        $(_ipt[0]).val((_seconds === 0 && _minutes !== 0) ? --_minutes :_minutes);
+                        $(_ipt[1]).val(_seconds>0 ? --_seconds : _seconds=59);
+                        _ipt.each(function (i) {
+                            i<2 && $(this).val($(this).val().length === 1 ? '0'+$(this).val() :$(this).val());
+                        });
+                        (_seconds === 0 && _minutes ===0) && clearInterval(interval);
+                    },1000);
+                }
+                else {
+                    $(this).removeClass("cancel");
+                    clearInterval(interval);
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+    <div id="outer">
+        <input type="text" value="01">
+        <span>分钟</span>
+        <input type="text" value="40">
+        <span>秒</span>
+        <input type="button">
+    </div>
+</body>
+</html>
