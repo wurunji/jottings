@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>setTimeout应用</title>
+    <script src="../../../library/vue.min.js"></script>
+    <style type="text/css">
+        body{font: 12px/1.5 Arial;}
+        body,div,ul,li,a,p,span,em{margin: 0;padding: 0;}
+        a,a:link,a:hover,a:active,a:visited{text-decoration: none;}
+        ul{list-style-type: none;}
+        #oNav,#oNav>ul,#oNav>ul>li,#oNav>ul>li>a:hover,#oNav>.subNav,#oNav>.subNav>.arrow,#oNav>.subNav>p,#oNav>.subNav>p>span{
+            background: url("./img/nav_bg.png") no-repeat;
+        }
+        #oNav{
+            position: relative;
+            width: 910px;
+            margin: 10px auto;
+            background-position-y: -36px;
+        }
+        #oNav>ul{
+            height: 36px;
+            line-height: 36px;
+            margin-left: 10px;
+            padding-right: 10px;
+            overflow: hidden;
+            background-position: right -72px;
+        }
+        #oNav>ul>li{
+            float: left;
+            width: 110px;
+            margin-left: -2px;
+            background-position-y: -108px;
+        }
+        #oNav>ul>li>a{
+            color: #ffffff;
+            width: 102px;
+            font-size: 14px;
+            display: block;
+            text-align: center;
+            margin: 0 2px 0 4px;
+        }
+        #oNav>ul>li>a:hover{
+            font-weight: 700;
+            background-position: -3px -144px;
+        }
+        #oNav>.subNav{
+            position: absolute;
+            top: 41px;
+            width: auto;!important;
+            min-width: 110px;
+            height: 27px;
+            line-height: 27px;
+            white-space: normal;
+            background-position-y: -180px;
+        }
+        #oNav>.subNav>.arrow{
+            position: absolute;
+            top: -4px;
+            display: block;
+            width: 11px;
+            height: 5px;
+            background-position-y: -261px;
+        }
+        #oNav>.subNav>p{
+            margin-left: 7px;
+            padding-right: 10px;
+            background-position: right -234px;
+        }
+        #oNav>.subNav>p>span{
+            display: inline-block;
+            color: #235e99;
+            background-repeat: repeat-x;
+            background-position-y: -207px;
+            padding-left: 3px;
+        }
+        #oNav>.subNav>p>span>a{
+            font-size: 12px;
+            color: #235e99;
+            margin: 0 5px;
+            padding: 0 2px;
+        }
+        #oNav>.subNav>p>span>a:hover{border-bottom: 2px solid;}
+        #oNav>.subNav>p>span:last-of-type>span{display: none;}
+    </style>
+</head>
+<body>
+    <div id="oNav">
+        <nav-component v-bind:nav-links="navLinks"></nav-component>
+        <sub-nav-component></sub-nav-component>
+    </div>
+
+    <template id="navComponent">
+        <ul>
+            <li v-for="navLink in navLinks">
+                <a href="javascript:">{{navLink}}</a>
+            </li>
+        </ul>
+    </template>
+    <template id="subNavComponent">
+        <div class="subNav" v-bind:style=subNavPosition[navIndex]>
+            <em class="arrow" v-bind:style=arrowPosition[navIndex]></em>
+            <p>
+                <span v-for="subNavLink in subNavLinks[navIndex]">
+                    <a href="javascript:">{{subNavLink}}</a><span>|</span>
+                </span>
+            </p>
+        </div>
+    </template>
+    <script>
+        Vue.component('sub-nav-component',{
+            template:'#subNavComponent',
+            data() {
+                return {
+                    subNavLinks:[
+                        [],
+                        ['业界动态','收购融资','门户动态','搜索引擎','网络游戏','电子商务','广告传媒','厂商开发'],
+                        ['站长报道','好站推荐','站长聚会','站长访谈','站长茶馆','网站排行'],
+                        ['建站经验','策划盈利','搜索优化','网站推广','免费资源'],
+                        ['酷站推荐','网页设计','WEB标准','视频处理','设计活动'],
+                        ['ASP编程','Php编程','.Net编程','Xml编程','Access','Mssql','Mysql'],
+                        ['联盟动态','联盟介绍','联盟点评','网赚技巧'],
+                        ['Web服务器','Ftp服务器','Mail服务器','Dns服务器','Win服务器','Linux服务器','安全防护','虚拟主机']
+                    ],
+                    subNavPosition:['','left:116px;','left:224px;','left:332px;','left:440px','right:0px','right:0px','right:0px'],
+                    arrowPosition:['','left:50px;','left:50px;','left:50px;','left:50px','left:128px','left:82px','left:527px'],
+                    navIndex:3
+                }
+            }
+        })
+        new Vue({
+            el:'#oNav',
+            data (){
+              return {
+                  navLinks:['站长之家', '行业资讯', '站长在线', '网站运营', '设计在线', '网络编程', '联盟资讯', '服务器']
+              }
+            },
+            components:{
+                'nav-component':{
+                    template:'#navComponent',
+                    props: ['navLinks']
+                }
+            }
+        })
+
+    </script>
+</body>
+</html>
